@@ -58,12 +58,13 @@
         const CheckCircle = (props) => <IconBase {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></IconBase>;
         const XCircle = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></IconBase>;
         const FileText = (props) => <IconBase {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></IconBase>;
+        const ClipboardList = (props) => <IconBase {...props}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></IconBase>;
 
         // --- COMPONENTES DE LA APLICACIÓN ---
 
         const App = () => {
           const [currentSlide, setCurrentSlide] = useState(0);
-          const totalSlides = 9;
+          const totalSlides = 14; // Aumentado para incluir diapositivas de enunciado
 
           const nextSlide = () => {
             if (currentSlide < totalSlides - 1) setCurrentSlide(currentSlide + 1);
@@ -78,12 +79,50 @@
               case 0: return <SlideIntro onStart={nextSlide} />;
               case 1: return <SlideTeoria />;
               case 2: return <SlideDiagramas />;
-              case 3: return <SlideEjercicioLogin />;
-              case 4: return <SlidePseudocodigo />;
-              case 5: return <SlideMicrobitIntro />;
-              case 6: return <SlidePracticaDado />;
-              case 7: return <SlidePracticaTermometro />;
-              case 8: return <SlidePracticaReflejos />;
+              
+              // Ejercicio 1
+              case 3: return <SlideEnunciado 
+                              titulo="Ejercicio 1: Control de Acceso" 
+                              descripcion="Diseñar un algoritmo que solicite una contraseña numérica (1234). Si el usuario la introduce correctamente, el sistema debe permitir el acceso. Si falla, debe contar los intentos. Al tercer intento fallido, el sistema debe bloquearse." 
+                              icono={<Lock size={60} className="text-blue-400" />}
+                            />;
+              case 4: return <SlideEjercicioLogin />;
+              
+              // Ejercicio 2
+              case 5: return <SlideEnunciado 
+                              titulo="Ejercicio 2: Calculadora de Notas" 
+                              descripcion="Crear un programa que solicite tres calificaciones numéricas. Debe calcular la media aritmética de las tres. Dependiendo del resultado, mostrar: 'Suspenso' si es menor a 5, 'Aprobado' si está entre 5 y 8, o 'Sobresaliente' si es mayor a 8."
+                              icono={<FileText size={60} className="text-emerald-400" />}
+                            />;
+              case 6: return <SlidePseudocodigo />;
+              
+              // Intro Micro:bit
+              case 7: return <SlideMicrobitIntro />;
+              
+              // Práctica A
+              case 8: return <SlideEnunciado 
+                              titulo="Práctica A: Dado Digital" 
+                              descripcion="Programar la placa Micro:bit para simular el comportamiento de un dado. Cuando el usuario agite la placa (evento 'Shake'), la pantalla LED debe mostrar un número aleatorio entre el 1 y el 6."
+                              icono={<Dice5 size={60} className="text-purple-400" />}
+                            />;
+              case 9: return <SlidePracticaDado />;
+              
+              // Práctica B
+              case 10: return <SlideEnunciado 
+                              titulo="Práctica B: Termómetro de Seguridad" 
+                              descripcion="Utilizar el sensor de temperatura integrado. El programa debe leer la temperatura ambiente constantemente. Si supera los 25ºC, debe alertar mostrando una calavera. Si no, debe mostrar el valor numérico de la temperatura."
+                              icono={<Thermometer size={60} className="text-yellow-400" />}
+                            />;
+              case 11: return <SlidePracticaTermometro />;
+              
+              // Práctica C
+              case 12: return <SlideEnunciado 
+                              titulo="Práctica C: Juego de Reflejos" 
+                              descripcion="Crear un juego de velocidad de reacción. Al iniciar, el sistema espera un tiempo aleatorio (2-5 segundos). Luego muestra un icono (Corazón). El usuario debe pulsar el botón A lo más rápido posible. El sistema mostrará los milisegundos que tardó en reaccionar."
+                              icono={<Zap size={60} className="text-red-400" />}
+                            />;
+              case 13: return <SlidePracticaReflejos />;
+              
               default: return <SlideIntro />;
             }
           };
@@ -262,6 +301,28 @@
             );
         };
 
+        // --- NUEVO COMPONENTE: SlideEnunciado ---
+        const SlideEnunciado = ({ titulo, descripcion, icono }) => (
+            <div className="flex flex-col items-center justify-center h-full text-center animate-fadeIn max-w-4xl mx-auto">
+                <div className="bg-slate-800/50 p-8 rounded-full mb-8 border border-slate-700">
+                    {icono}
+                </div>
+                <h2 className="text-4xl font-bold text-white mb-6 tracking-wide">{titulo}</h2>
+                <div className="bg-slate-800 p-8 rounded-2xl border-l-8 border-blue-500 shadow-lg text-left w-full">
+                    <h3 className="text-blue-300 font-bold text-lg mb-2 uppercase flex items-center">
+                        <span className="mr-2">📝</span> Enunciado
+                    </h3>
+                    <p className="text-xl text-slate-300 leading-relaxed font-light">
+                        {descripcion}
+                    </p>
+                </div>
+                <div className="mt-12 animate-bounce">
+                    <p className="text-slate-500 text-sm">Pulsa "Siguiente" para ver la solución y el simulador</p>
+                    <ChevronRight className="mx-auto mt-2 text-slate-600 rotate-90 md:rotate-0" />
+                </div>
+            </div>
+        );
+
         const SlideEjercicioLogin = () => {
             const [step, setStep] = useState(0);
             const [intentos, setIntentos] = useState(0);
@@ -304,7 +365,7 @@
             return (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full animate-fadeIn">
                     <div>
-                        <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center"><Lock className="mr-2"/> Ejercicio 1: Login</h2>
+                        <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center"><Lock className="mr-2"/> Solución: Login</h2>
                         <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
                             <p className="text-sm text-slate-400 mb-4">Simulador del algoritmo:</p>
                             
@@ -407,7 +468,7 @@
             return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fadeIn h-full">
                     <div className="flex flex-col justify-center">
-                        <h2 className="text-2xl font-bold text-blue-300 mb-4">Pseudocódigo: Ejercicio 2</h2>
+                        <h2 className="text-2xl font-bold text-blue-300 mb-4">Solución: Pseudocódigo</h2>
                         <p className="text-slate-300 mb-6">
                             El pseudocódigo es un lenguaje a medio camino entre el lenguaje humano y el código de programación.
                         </p>
